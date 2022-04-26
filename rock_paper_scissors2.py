@@ -1,5 +1,4 @@
 from tkinter import *
-#from tkinter.ttk import *
 from pathlib import Path
 import random
 import time
@@ -12,7 +11,7 @@ def resource_path(relative_path):
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
-
+        # Just use file=resource_path('rock.png') instead of file='rock.png'
     return os.path.join(base_path, relative_path)
 
 
@@ -24,22 +23,25 @@ root = Tk()
 
 #defs
 def p_rock():
-    global label_p
-    global label_m
-    global label_vs
-    global image_p
-    global label_res
+    global label_p # Player choice Label
+    global label_m # Machine choice Label
+    global label_vs # vs Label
+    global image_p # Player choice image
+    global label_res # Result Label
     player = 'rock'
+    # Erase the previous game Labels
     label_p.destroy()
     label_m.destroy()
     label_vs.destroy()
     label_res.destroy()
-    image_p = root.r
+    image_p = root.r # root.r is rock image
+    # Canvas for player choice
     label_p = Label(root, image=image_p)
     label_p_canvas = canvas1.create_window(30, 120, anchor="nw", window=label_p)
+    # Canvas for "vs"
     label_vs = Label(root, image=root.vs)
     label_vs_canvas = lambda : canvas1.create_window(168, 120, anchor="nw", window=label_vs)
-    canvas1.after(600,label_vs_canvas)
+    canvas1.after(600,label_vs_canvas) # Appears after 600ms
     calc(player)
 def p_paper():
     global label_p
@@ -81,14 +83,15 @@ def calc(p):
     global image_p
     global label_m
     m = random.choice(['scissors', 'rock', 'paper'])
-    if p == m:
-        label_m = Label(root, image=image_p)
+    if p == m: # If tie
+        label_m = Label(root, image=image_p) # Machine choice img is same
+        # Canvas for machine choice img
         label_m_canvas = lambda : canvas1.create_window(275, 120, anchor="nw", window=label_m)
         canvas1.after(1300,label_m_canvas)
         e_tie()
     elif p == 'rock':
         if m == 'paper':
-            label_m = Label(root, image=root.p)
+            label_m = Label(root, image=root.p) # Images r for rock, p for paper and s for scissors
             label_m_canvas = lambda : canvas1.create_window(275, 120, anchor="nw", window=label_m)
             canvas1.after(1300,label_m_canvas)
             e_lose()
@@ -122,10 +125,12 @@ def calc(p):
 def e_tie():
     global label_res
     global t
-    t += 1
+    t += 1 # Ties counter
+    # Label for result
     label_res = Label(root, text="It's a Tie!!!", fg="white", bg='black', font=("Times", "28", "bold italic"))
     label_res_canvas = lambda : canvas1.create_window(100, 250, anchor="nw", window=label_res)
     canvas1.after(1900,label_res_canvas)
+    # Label for score
     label_score = Label(root, text=f"Win:{w}   Lose:{l}   Tie:{t}", fg="white", bg='black', font=("Times", "28", "bold italic"))
     label_score_canvas = lambda : canvas1.create_window(27, 30, anchor="nw", window=label_score)
     canvas1.after(2600,label_score_canvas)
@@ -176,7 +181,7 @@ root.vs = vs
 canvas1 = Canvas(root, width=402, height=531, bd=0, bg='black', highlightthickness=0)
 canvas1.pack(fill="both", expand=True)
 
-# Labels
+# Inicial Labels
 label_p = Label(root)
 label_p_canvas = canvas1.create_window(30, 120, anchor="nw", window=label_p, state='hidden')
 label_m = Label(root)
@@ -185,7 +190,6 @@ label_vs = Label(root)
 label_vs_canvas = canvas1.create_window(150, 120, anchor="nw", window=label_vs, state='hidden')
 label_res = Label(root)
 label_res_canvas = canvas1.create_window(150, 220, anchor="nw", window=label_res, state='hidden')
-
 
 # Create buttons
 btn_rock = Button(root, image=root.rock, command=p_rock)
